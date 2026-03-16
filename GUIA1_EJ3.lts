@@ -1,0 +1,19 @@
+MEETING = (hello -> converse -> goodbye -> STOP).
+
+JOB = (arrive -> work -> leave -> JOB).
+
+GAME = ({one, two} -> STATE2
+	   |tree -> STATE1
+	   ),
+	STATE1 = (lose -> GAME),
+	STATE2 = (win -> GAME).
+
+MOVIE = (ahead -> (right -> MOVIE
+				  |left -> STOP)).
+
+FOURTICK = (tick -> tick -> tick -> tick -> STOP).
+
+DOUBLE = (in[i:1..3] -> out[i] -> DOUBLE).
+
+PERSON = (weekend -> sleep -> work -> PERSON
+         |weekend -> sleep -> {play,shop} -> PERSON). 
