@@ -1,0 +1,45 @@
+//EJ5
+BISTABLE = (trigger -> [1] -> trigger -> [0] -> BISTABLE).
+
+//EJ6
+const N = 9
+range T = 0..N
+
+SENSOR = SENS[5],
+SENS[x:T] = (when (x>=2 && x<=8) normal -> SENS[x]
+			|when (x<2) bajo -> SENS[x]
+			|when (x>8) alto -> SENS[x]
+			|when (x<9) up -> SENS[x+1]
+			|when (x>0) down -> SENS[x-1]
+			//|change[u:T] -> SENS[u]
+			).
+
+//EJ7
+const Gaseosa = 15
+const Max = Gaseosa*2
+
+EXPENDEDORA = Pay[0],
+
+Pay[x:0..Max] = ( when (x >= Gaseosa) gaseosa -> Vuelto[x]
+                | when (x < Gaseosa) pay[5]  -> Pay[x+5] 
+                | when (x < Gaseosa) pay[10] -> Pay[x+10]
+                | when (x < Gaseosa) pay[20] -> Pay[x+20]
+                ),
+
+Vuelto[x:Gaseosa..Max] = ( when (x==15) vuelto[0]  -> EXPENDEDORA
+                         | when (x==20) vuelto[5]  -> EXPENDEDORA
+                         | when (x==25) vuelto[10] -> EXPENDEDORA
+                         | when (x==30) vuelto[15] -> EXPENDEDORA
+                         ).
+
+//EJ8
+const MaxMhz = 108
+const MinMhz = 88
+range Frecuencia = MinMhz..MaxMhz
+
+RADIO = OFF,
+OFF = (on -> ON[MaxMhz]),
+ON[f:Frecuencia] = (off -> OFF
+				   |reset -> ON[MaxMhz]
+				   |when (f>MinMhz) scan -> ON[f-1]
+				   ).
