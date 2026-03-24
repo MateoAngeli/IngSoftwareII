@@ -1,0 +1,37 @@
+//EJ12
+set Tipos = {a,b,c,d}
+
+CINTA = (advance -> MOVING),
+MOVING = (advance -> MOVING
+		 |sensor[t:Tipos] -> REST),
+REST = (type[t:Tipos] -> grab[t] -> CINTA).
+
+BRAZO1 = (grab['a] -> load_press['a] -> BRAZO1
+		 |grab['b] -> load_drill['b] -> BRAZO1
+		 |grab['c] -> load_press['c] -> BRAZO1
+		 |grab['d] -> load_drill['d] -> BRAZO1).
+
+PRENSA = (load_press['a] -> press -> unload_press['a] -> PRENSA
+		 |load_press['c] -> press -> unload_press['c] -> PRENSA
+		 |load_press['d] -> press -> unload_press['d] -> PRENSA).
+
+DRILL = (load_drill['b] -> drill -> unload_drill['b] -> DRILL
+		|load_drill['c] -> drill -> unload_drill['c] -> DRILL
+		|load_drill['d] -> drill -> unload_drill['d] -> DRILL).
+
+BRAZO2 = (unload_press['a] -> remove -> BRAZO2
+		 |unload_drill['b] -> remove -> BRAZO2
+
+		 |unload_press['c] -> (load_drill['c] -> BRAZO2 
+							  |put_table['c] -> BRAZO2)
+		 |get_table['c] -> load_drill['c] -> BRAZO2
+		 |unload_drill['c] -> remove -> BRAZO2
+
+		 |unload_drill['d] -> (load_press['d] -> BRAZO2
+							  |put_table['d] -> BRAZO2)
+		 |get_table['d] -> load_press['d] -> BRAZO2
+		 |unload_press['d] -> remove -> BRAZO2).
+
+MIDTABLE = (put_table[t:{c,d}] -> get_table[t] -> MIDTABLE).
+
+||PRODUCCION = (CINTA || BRAZO1 || PRENSA || DRILL || BRAZO2 || MIDTABLE).

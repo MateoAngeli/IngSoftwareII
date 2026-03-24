@@ -1,0 +1,17 @@
+//EJ10
+
+DIRECTOR = (open -> close -> DIRECTOR).
+
+CONTROL = CLOSED,
+CLOSED = (exit -> CLOSED
+		 |open -> OPEN),
+OPEN = (enter -> OPEN
+	   |exit -> OPEN
+       |close -> CLOSED).
+
+EAST = (enter -> EAST).
+
+WEST = (exit -> WEST).
+
+||MUSEUM = (DIRECTOR || CONTROL || EAST || WEST).
+

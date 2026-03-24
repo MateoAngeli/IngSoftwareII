@@ -1,0 +1,14 @@
+//EJ11
+
+CINTA = (advance -> MOVING),
+MOVING = (advance -> MOVING
+		 |sensor -> REST),
+REST = (stop -> grab -> CINTA).
+
+BRAZO1 = (grab -> load_press -> BRAZO1).
+
+PRENSA = (load_press -> press -> unload_press -> PRENSA).
+
+BRAZO2 = (unload_press -> remove -> BRAZO2).
+
+||PRODUCCION = (CINTA || BRAZO1 || PRENSA || BRAZO2).

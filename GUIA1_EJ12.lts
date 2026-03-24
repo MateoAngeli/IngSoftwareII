@@ -1,0 +1,19 @@
+//EJ12
+
+CINTA = (advance -> MOVING),
+MOVING = (advance -> MOVING
+		 |sensor -> REST),
+REST = (typeA -> grabA -> CINTA
+	   |typeB -> grabB -> CINTA).
+
+BRAZO1 = (grabA -> load_press -> BRAZO1
+		 |grabB -> load_drill -> BRAZO1).
+
+PRENSA = (load_press -> press -> unload_press -> PRENSA).
+
+DRILL = (load_drill -> drill -> unload_drill -> DRILL).
+
+BRAZO2 = (unload_press -> remove -> BRAZO2
+		 |unload_drill -> remove -> BRAZO2).
+
+||PRODUCCION = (CINTA || BRAZO1 || PRENSA || DRILL || BRAZO2).
