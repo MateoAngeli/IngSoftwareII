@@ -1,0 +1,22 @@
+const N = 3
+const M = 2
+const K = 2
+range T = 0..K
+
+SHARED = RESOURCE[0][0],
+RESOURCE[readers:T][writing:0..1] = (
+	  when (writing == 0 && readers < K) read -> RESOURCE[readers+1][0]
+	| when (writing == 0 && readers == 0) write -> RESOURCE[0][1]
+	| when (readers > 0) release -> RESOURCE[readers-1][0]
+	| when (writing == 1) release -> RESOURCE[readers][0]
+).
+
+READER = (read  -> reading -> realease -> READER).
+WRITER = (write -> writing -> realease -> WRITER
+		 |read  -> reading -> realease -> WRITER).
+
+||RW = (
+	r[1..N]:READER ||
+	w[1..M]:WRITER ||
+	{r[1..N], w[1..M]}::SHARED
+).
