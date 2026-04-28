@@ -1,0 +1,19 @@
+const N = 2
+const M = 4
+range Servings = 0..M
+
+SAVAGE = (is_hungry -> serve -> eat -> SAVAGE).
+
+CHEF = (cook -> CHEF).
+
+POT = POT[M],
+POT[s:Servings] = (
+	 when (s == 0) cook -> POT[M]
+	|when (s > 0) serve -> POT[s-1]
+).
+
+||DINING = (
+	s[1..N]:SAVAGE ||
+	chef:CHEF ||
+	{s[1..N], chef}::POT
+).
