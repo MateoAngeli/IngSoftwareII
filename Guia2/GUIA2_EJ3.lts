@@ -1,0 +1,21 @@
+const N = 1
+const M = 3
+range Seats = 1..M
+
+SEAT = FREE,
+FREE = (is_free -> HOLD),
+HOLD = (reserve -> RESERVED
+	   |cancel -> FREE
+	   |wait -> HOLD),
+RESERVED = (is_reserved -> RESERVED).
+
+TERMINAL = (s[i:Seats].is_free -> ACTION[i]
+		   |s[i:Seats].is_reserved -> TERMINAL
+		   |s[i:Seats].wait -> TERMINAL),
+ACTION[i:Seats] = (s[i].reserve -> TERMINAL
+		 			  |s[i].cancel -> TERMINAL).
+
+||THEATER = (
+    t[1..N]:TERMINAL || 
+    {t[1..N]}::s[1..M]:SEAT
+).
