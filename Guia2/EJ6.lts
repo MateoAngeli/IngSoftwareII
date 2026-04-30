@@ -1,0 +1,21 @@
+CHANNEL = (in -> (out -> CHANNEL
+	   			 |lose -> CHANNEL
+	   			 |out -> out-> CHANNEL)).
+
+TRANSMITTER = (msg -> in -> WAIT),
+WAIT = (ack -> TRANSMITTER
+	   |in -> WAIT).
+
+RECEIVER = (out -> deliver -> ack_in -> RECEIVER).
+
+||PAR = (
+	data:CHANNEL ||
+	ack:CHANNEL  ||
+	TRANSMITTER  ||
+	RECEIVER
+) / {
+	data.in  / in,
+	data.out / out,
+	ack.in   / ack_in,
+	ack.out  / ack_out
+}.
