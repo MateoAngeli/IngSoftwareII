@@ -1,0 +1,29 @@
+range Bit = 0..1
+
+CHANNEL = (in[b:Bit] -> (out[b] -> CHANNEL
+	   			 		|lose -> CHANNEL
+	   			 		|out[b] -> out[b] -> CHANNEL)).
+
+TRANSMITTER = SENDER[0],
+SENDER[b:Bit] = (msg[b] -> in[b] -> WAIT[b]),
+WAIT[b:Bit] = (ack_out[b] -> SENDER[1-b]	//Succes, flip to next bit
+			  |ack_out[1-b] -> WAIT[b]		//Ignore, got an old ack
+	   	  	  |in[b] -> WAIT[b]).			//Timeout, retransmit
+
+RECEIVER = REC[0],
+REC[exp:Bit] = (
+	 out[exp] -> deliver[exp] -> ack_in[exp] -> REC[1-exp]	//Succes, expect next bit
+	|out[1-exp] -> ack_in[1-exp] -> REC[exp]				//Duplicate, resend old ack
+).
+
+||GBN_N1 = (
+	data:CHANNEL ||
+	ack:CHANNEL  ||
+	TRANSMITTER  ||
+	RECEIVER
+) / {
+	data.in[b:Bit]  / in[b],
+	data.out[b:Bit] / out[b],
+	ack.in[b:Bit]   / ack_in[b],
+	ack.out[b:Bit]  / ack_out[b]
+}.
